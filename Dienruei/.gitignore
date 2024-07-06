@@ -1,0 +1,6 @@
+.env
+__pycache__
+outputs
+*.mp4
+*.avi
+*.wav
