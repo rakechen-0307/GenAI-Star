@@ -1,0 +1,7 @@
+librosa
+matplotlib
+opencv-python
+numpy==1.26
+openai
+python-dotenv
+pydub
