@@ -2,6 +2,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from pydub import AudioSegment
 import csv
+import librosa
 import os
 import argparse
 from tqdm import tqdm
@@ -22,6 +23,14 @@ if __name__ == '__main__':
     audio_files = [args.audio + '/' + path for path in get_all_files(folder_path)]
     # print(audio_files)
     audio_files = sorted(audio_files)
+    
+    # check whether the length of last audio is >0.1 seconds
+    audio_path = audio_files[-1]
+    y, sr = librosa.load(audio_path, sr=None)
+    duration = librosa.get_duration(y=y, sr=sr)
+    if duration <= 0.1:
+        audio_files = audio_files[:-1]
+        os.system(f"rm {audio_path}")
 
     transcripts = []
     
@@ -55,5 +64,5 @@ if __name__ == '__main__':
                     'transcript': transcript[1]
                 })
         
-        print("Audio transcripted into transcripts.csv")
+    print("Audio transcripted into transcripts.csv")
         
