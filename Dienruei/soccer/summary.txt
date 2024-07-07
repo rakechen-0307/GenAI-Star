@@ -1,5 +1,0 @@
-Score change time: 00:17:22 ~ 00:18:37 --- score: 0-0 => 1-0, Game Time: 14:37
-Score change time: 00:21:52 ~ 00:23:07 --- score: 1-0 => 1-1, Game Time: 19:07
-Score change time: 00:46:52 ~ 00:48:07 --- score: 1-1 => 2-1, Game Time: 44:06
-Score change time: 01:26:52 ~ 01:28:07 --- score: 2-1 => 2-2, Game Time: 81:19
-Score change time: 01:32:22 ~ 01:33:37 --- score: 2-2 => 3-2, Game Time: 86:49
