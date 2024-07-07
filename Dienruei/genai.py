@@ -11,7 +11,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     try:
-        folder_name = os.path.basename(args.video)
+        folder_name = os.path.basename(args.video).split('.')[0]
         if os.system(f"python split_audio.py {args.video}") != 0: raise
         if args.denoise:
             if os.system(f"python nr_split.py outputs") != 0: raise

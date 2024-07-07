@@ -1,27 +1,25 @@
-Here is a detailed summary of the baseball game transcript with appropriate timelines, focusing on the changes in scores:
+Based on the provided transcript and timelines, it is evident that the sports game being played is a football (soccer) match. The match is between FC Barcelona and Real Madrid, specifically the second leg of the Spanish Super Cup.
 
-| Timestamp   | Summary                                                                                               |
-|-------------|-------------------------------------------------------------------------------------------------------|
-| 0:0:0       | Introduction to the Spanish Super Cup second leg between Barcelona and Real Madrid.                    |
-| 0:1:45      | Game starts with scores tied at 2-2 from the first leg.                                                |
-| 0:3:0       | Real Madrid's Ronaldo gets a chance, but Valdez blocks it.                                             |
-| 0:10:45     | Barcelona scores the first goal of the game, making it 1-0.                                            |
-| 0:13:30     | Real Madrid equalizes with a goal from Cristiano Ronaldo, making it 1-1.                               |
-| 0:15:15     | Midway through the first half, the game is tied at 1-1.                                                |
-| 0:31:30     | Barcelona's Messi scores, making it 2-1 just before halftime.                                          |
-| 0:33:15     | Halftime with Barcelona leading 2-1.                                                                   |
-| 0:34:15     | Second half begins with Barcelona leading 2-1.                                                         |
-| 0:40:0      | Real Madrid's Benzema scores, equalizing the game at 2-2.                                              |
-| 0:41:30     | Barcelona's Messi scores again, making it 3-2 with three minutes to go.                                |
-| 0:43:30     | The final whistle blows, and Barcelona wins the game 3-2.                                              |
+Here is a summary of the game in table format, correlated to the score changes:
 
-### Recommended Highlight Timelines:
-1. **0:3:0** - Ronaldo's early chance blocked by Valdez.
-2. **0:10:45** - Barcelona's first goal of the game.
-3. **0:13:30** - Ronaldo's equalizing goal for Real Madrid.
-4. **0:31:30** - Messi's goal just before halftime.
-5. **0:40:0** - Benzema's equalizing goal for Real Madrid.
-6. **0:41:30** - Messi's decisive goal making it 3-2.
-7. **0:43:30** - Final whistle and Barcelona's victory celebration.
+| Timestamp          | Game Time | Score Change | Summary                                                                 |
+|--------------------|-----------|--------------|-------------------------------------------------------------------------|
+| 00:17:22 - 00:18:37 | 14:37     | 0-0 to 1-0   | Barcelona scores the first goal of the match.                           |
+| 00:21:52 - 00:23:07 | 19:07     | 1-0 to 1-1   | Real Madrid equalizes, making it 1-1.                                   |
+| 00:46:52 - 00:48:07 | 44:06     | 1-1 to 2-1   | Barcelona scores again just before halftime, taking the lead 2-1.       |
+| 01:26:52 - 01:28:07 | 81:19     | 2-1 to 2-2   | Real Madrid scores late in the second half to make it 2-2.              |
+| 01:32:22 - 01:33:37 | 86:49     | 2-2 to 3-2   | Barcelona scores the winning goal, making it 3-2.                       |
 
-These highlights capture the key moments and turning points of the game, showcasing the critical plays and goals that determined the outcome.
+### Recommended Highlight Timelines
+1. **00:17:22 - 00:18:37**: Barcelona's first goal, opening the score.
+2. **00:21:52 - 00:23:07**: Real Madrid's equalizer.
+3. **00:46:52 - 00:48:07**: Barcelona's second goal just before halftime.
+4. **01:26:52 - 01:28:07**: Real Madrid's late equalizer.
+5. **01:32:22 - 01:33:37**: Barcelona's winning goal.
+6. **00:03:00 - 00:03:15**: Early chance by Ronaldo, blocked by Valdez.
+7. **00:09:00 - 00:09:15**: Close attempt by Messi, just missing the goal.
+8. **00:18:00 - 00:18:15**: Powerful shot by Ronaldo, hitting the crossbar.
+9. **00:31:30 - 00:31:45**: Messi's fantastic goal making it 2-1.
+10. **01:38:15 - 01:38:30**: Final moments and the celebration of Barcelona's victory.
+
+These highlights capture the key moments and turning points of the match, providing a comprehensive view of the game's progression and excitement.
