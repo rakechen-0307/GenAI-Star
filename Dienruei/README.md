@@ -25,7 +25,7 @@ The above pipeline is implemented in `genai.py`.
 Load API Key in `.env`
 
 ```bash
-python genai.py [-h] [-t TIMELINE] [--denoise DENOISE] [-o OUTPUT] video
+python genai.py [-h] [-t TIMELINE] [--denoise DENOISE] [-p PROMPT] [-o OUTPUT] video
 
 python split_audio.py [-h] [-o OUTPUT] input
 
@@ -33,5 +33,5 @@ python nr_split.py [-h] audio
 
 python transcript.py [-h] [-o OUTPUT] audio
 
-python summary.py [-h] [-o OUTPUT] [--outputjson OUTPUTJSON] [-t TIMELINE] text
+python summary.py [-h] [-o OUTPUT] [--outputjson OUTPUTJSON] [-t TIMELINE] [-p PROMPT] text
 ```
