@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import base64
 import pickle
+from tqdm import tqdm
 
 from extract_video_highlight import extract_hightlight
 from gen_score_change_summary import gen_score_change_summary
@@ -41,9 +42,9 @@ def ask_question(first_base64_image, second_base64_image):
     # print(response.choices[0].message.content)
     return response.choices[0].message.content.lower() == "true"
 
-
-ckpt_file = "soccer_scoreboard.pt"
-video_file = "./Decibels/videos/soccer-full.mp4"
+SPORTS="baseball"
+ckpt_file = "baseball_scoreboard.pt"
+video_file = "./videos/Mexico_Japan_baseball_full.mp4"
 tmp_frames_dir = "./frames_tmp"
 
 yolo_model = YOLO(ckpt_file)
@@ -84,7 +85,7 @@ os.mkdir(frames_dir)
 low, high = 0, 0
 scoreboard_pos = []
 frames = sorted(os.listdir(tmp_frames_dir))
-for i in range(len(frames)):
+for i in tqdm(range(len(frames)), desc="Detecting Scoreboard..."):
     target_img = tmp_frames_dir + "/" + frames[i]
     detect_result = yolo_model.predict(source=target_img, conf=0.5, verbose=False)
     classes = torch.Tensor.numpy(detect_result[0].boxes.xyxy.cpu())
@@ -160,28 +161,34 @@ def binarySearch(low, high, highlight_idx):
     if not answer_r: # Different
         binarySearch(mid, high, highlight_idx)
 
-if os.path.exists("highlight_idx.pkl"):
-    with open("highlight_idx.pkl", "rb") as f:
+if not os.path.exists("./data"):
+    os.makedirs("./data")
+
+if not os.path.exists(f"./data/{SPORTS}"):
+    os.makedirs(f"./data/{SPORTS}")
+
+if os.path.exists(f"data/{SPORTS}/highlight_idx.pkl"):
+    with open(f"data/{SPORTS}/highlight_idx.pkl", "rb") as f:
         highlight_idx = pickle.load(f)
 else:
     highlight_idx = []
     binarySearch(0, len(frames)-1, highlight_idx)
     if highlight_idx[-1] != len(frames) - 1:
         highlight_idx.append(len(frames) - 1)
-    with open("highlight_idx.pkl", "wb") as f:
+    with open(f"data/{SPORTS}/highlight_idx.pkl", "wb") as f:
         pickle.dump(highlight_idx, f)
 
 print(highlight_idx)
 
-# read the scoreboard from highlight_idx and get the score and innings information
-if os.path.exists("highlight_scoreboard.pkl") and os.path.exists("highlight_innings.pkl"):
-    with open("highlight_scoreboard.pkl", "rb") as f:
+# read the scoreboard from highlight_idx and get the score and times information
+if os.path.exists(f"data/{SPORTS}/highlight_scoreboard.pkl") and os.path.exists(f"data/{SPORTS}/highlight_times.pkl"):
+    with open(f"data/{SPORTS}/highlight_scoreboard.pkl", "rb") as f:
         scoreboard = pickle.load(f)
-    with open("highlight_innings.pkl", "rb") as f:
-        innings = pickle.load(f)
+    with open(f"data/{SPORTS}/highlight_times.pkl", "rb") as f:
+        times = pickle.load(f)
 else:
     scoreboard = []
-    innings = []
+    times = []
     for i in highlight_idx:
         target_file = frames_dir + "/" + frames[i]
         target_img = cv2.imread(target_file)
@@ -189,10 +196,14 @@ else:
         cropped_target_file = "./scoreboard/target.jpg"
         cv2.imwrite(cropped_target_file, cropped_target)
         encoded_target = encode_image(cropped_target_file)
+        if SPORTS == "baseball":
+            systemIns = "You are a helpful assistant that reponds with the score and innings of a baseball game. The user will provide a scoreboard from a baseball game. Please tell the user the score and innings of the game in the image. Answer in the format of 'SCORE: [x-x], INNINGS: [x]' (x should be a number only, if innings are not available, set it to 9) ."
+        elif SPORTS == "soccer":
+            systemIns = "You are a helpful assistant that reponds with the score and time of a soccer game. The user will provide a scoreboard from a soccer game. Please tell the user the score and time of the game in the image. Answer in the format of 'SCORE: [x-x], TIME: [xx:xx]' (x should be a number only, if innings are not available, set it to 9) ."
         response = client.chat.completions.create(
             model=MODEL,
             messages=[
-                {"role": "system", "content": "You are a helpful assistant that reponds with the score and innings of a baseball game. The user will provide a scoreboard from a baseball game. Please tell the user the score and innings of the game in the image. Answer in the format of 'SCORE: [x-x], INNINGS: [x]' (x should be a number only, if innings are not available, set it to 9) ."},
+                {"role": "system", "content": systemIns},
                 {"role": "user", "content": [
                     {"type": "image_url", "image_url": {
                         "url": f"data:image/png;base64,{encoded_target}"}
@@ -204,23 +215,28 @@ else:
         # parse the response
         response = response.choices[0].message.content
         print(response)
-        response = response.split("SCORE: ")[1]
-        score, inning = response.split(", INNINGS: ")
-        print(score, inning)
-        scoreboard.append(score)
-        innings.append(inning)
+        if SPORTS == "baseball":
+            response = response.split("SCORE: ")[1]
+            score, time = response.split(", INNINGS: ")
+        elif SPORTS =="soccer":
+            response = response.split("SCORE: ")[1]
+            score, time = response.split(", TIME: ")
 
-    with open("highlight_scoreboard.pkl", "wb") as f:
+        print(score, time)
+        scoreboard.append(score)
+        times.append(time)
+
+    with open(f"data/{SPORTS}/highlight_scoreboard.pkl", "wb") as f:
         pickle.dump(scoreboard, f)
 
-    with open("highlight_innings.pkl", "wb") as f:
-        pickle.dump(innings, f)
+    with open(f"data/{SPORTS}/highlight_times.pkl", "wb") as f:
+        pickle.dump(times, f)
 
 print(scoreboard)
-print(innings)
+print(times)
 
 fps = video.get(cv2.CAP_PROP_FPS)
 frame_cnt = video.get(cv2.CAP_PROP_FRAME_COUNT)
-_, highlight_secs = gen_score_change_summary(highlight_idx, scoreboard, innings, frame_cnt, fps, sec, frames_dir)
+_, highlight_secs = gen_score_change_summary(highlight_idx, scoreboard, times, frame_cnt, fps, SPORTS, sec, frames_dir)
 
 extract_hightlight(video_file, highlight_secs)
