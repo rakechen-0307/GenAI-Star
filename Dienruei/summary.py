@@ -9,6 +9,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("text", type=str, help="input transcript")
     parser.add_argument("-o", "--output", type=str, help="output summary file")
+    parser.add_argument("-t", "--timeline", type=str, help="timeline file")
     args = parser.parse_args()
     
     load_dotenv()
@@ -31,27 +32,13 @@ if __name__ == "__main__":
     # I want to watch highlights about Masataka Yoshida.
     # """
     
-    MESSAGE_TIMELINE = ""\
-    # """
-    # Timeline & Score(Mexico vs Japan):
-    # 0:0:0 --- 0-0 
-    # 0:28:45 --- 3-0 
-    # 1:15:15 --- 3-3
-    # 1:19:30 --- 4-3
-    # 1:26:15 --- 5-3
-    # 1:31:30 --- 5-4
-    # 1:43:00 --- 5-6
-    # """
-    # """
-    # Timeline & Score(Mexico vs Japan):
-    # 0:0:0 --- 0-0 
-    # 0:1:15 --- 3-0 
-    # 0:1:50 --- 3-3
-    # 0:2:48 --- 4-3
-    # 0:3:35 --- 5-3
-    # 0:4:20 --- 5-4
-    # 0:5:15 --- 5-6
-    # """
+    MESSAGE_TIMELINE = ""
+    f = open(args.timeline)
+    for line in f:
+        MESSAGE_TIMELINE += line
+    f.close()
+    print(MESSAGE_TIMELINE)
+
     MESSAGES = [
         # {"role": "system", "content": "你是一個得力的助手，並且可以對給定的逐字稿(有對應的時間)做出高品質的摘要。"},
         {"role": "system", "content": "You are a helpful assistant and is able to produce high-quality summary for the given transcript with timestamps."},
