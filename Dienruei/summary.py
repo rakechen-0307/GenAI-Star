@@ -12,6 +12,7 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", type=str, help="output summary file")
     parser.add_argument("--outputjson", type=str, help="output highlight json file")
     parser.add_argument("-t", "--timeline", type=str, help="timeline file")
+    parser.add_argument("-p", "--prompt", type=str, help="prompt for generating the summary")
     args = parser.parse_args()
     
     load_dotenv()
@@ -33,6 +34,8 @@ if __name__ == "__main__":
     # USER_CONTENT = """
     # I want to watch highlights about Mike Trout.
     # """
+    if args.prompt:
+        USER_CONTENT = args.prompt
     
     MESSAGE_TIMELINE = ""
     if args.timeline:
