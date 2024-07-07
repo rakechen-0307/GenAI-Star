@@ -6,3 +6,8 @@ videos
 __pycache__
 data
 scoreboard
+
+# .mp4 .wav files
+**/*.mp4
+**/*.wav
+**/*.png

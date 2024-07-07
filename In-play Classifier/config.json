@@ -1,7 +1,7 @@
 {
     "RUN_DIR": "yolo-in-play-classifier-model",
-    "original_video_path": "US vs Japan World Baseball Classic Final.mp4",
-    "output_video_path": "extracted-highlights_usa_japan.mp4", 
+    "original_video_path": "Mexico vs Japan Full Game 2023.mp4",
+    "output_video_path": "extracted-highlights_mexico_japan.mp4", 
     "results_path": "results.png",
     "confidences_path": "confidences.png",
     "filtered_results_path": "filtered_results.png",
