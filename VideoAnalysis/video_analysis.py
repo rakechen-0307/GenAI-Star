@@ -44,7 +44,7 @@ def ask_question(first_base64_image, second_base64_image):
 
 SPORTS="baseball"
 ckpt_file = "baseball_scoreboard.pt"
-video_file = "../videos/mexico_vs_japan.mp4"
+video_file = "./videos/Mexcio_Japan_baseball_full.mp4"
 tmp_frames_dir = "./frames_tmp"
 
 yolo_model = YOLO(ckpt_file)
