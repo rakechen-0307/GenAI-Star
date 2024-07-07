@@ -12,6 +12,7 @@ from tqdm import tqdm
 from extract_video_highlight import extract_hightlight
 from gen_score_change_summary import gen_score_change_summary
 
+import argparse
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
 client = OpenAI(api_key=API_KEY)
@@ -42,9 +43,21 @@ def ask_question(first_base64_image, second_base64_image):
     # print(response.choices[0].message.content)
     return response.choices[0].message.content.lower() == "true"
 
-SPORTS="baseball"
-ckpt_file = "baseball_scoreboard.pt"
-video_file = "../Dienruei/baseball_highlight.mp4"
+argparser = argparse.ArgumentParser()
+argparser.add_argument("--sports", type=str, default="baseball")
+argparser.add_argument("--ckpt_file", type=str, default="baseball_scoreboard.pt")
+argparser.add_argument("--video_file", type=str, default="./videos/Mexico_Japan_baseball_full.mp4")
+args = argparser.parse_args()
+
+SPORTS = args.sports
+ckpt_file = args.ckpt_file
+video_file = args.video_file
+
+print(f"Analyzing {video_file}, a {SPORTS} game...")
+
+# SPORTS="baseball"
+# ckpt_file = "baseball_scoreboard.pt"
+# video_file = "./videos/Mexico_Japan_baseball_full.mp4"
 tmp_frames_dir = "./frames_tmp"
 
 yolo_model = YOLO(ckpt_file)
@@ -71,11 +84,11 @@ count = 1
 current_idx = 1
 sec = 30
 success, image = video.read()
+print("Loading all the frames...")
 while success:
     if count > (fps*current_idx*sec):
         writeImage(image, tmp_frames_dir, current_idx)
         current_idx += 1
-        print(current_idx)
     success, image = video.read()
     count += 1
 
@@ -104,8 +117,9 @@ video = cv2.VideoCapture(video_file)
 fps = video.get(cv2.CAP_PROP_FPS)
 cnt = video.get(cv2.CAP_PROP_FRAME_COUNT)
 # from the last frame
+print("Detecting the last frame that includes scoreboard...")
 while cnt > 0:
-    print(cnt, flush=True)
+    # print(cnt, flush=True)
     cnt -= int(fps)
     video.set(cv2.CAP_PROP_POS_FRAMES, cnt)
     success, image = video.read()
@@ -144,7 +158,7 @@ def askLLM(target, ref):
     response = ask_question(encoded_ref, encoded_target)
 
     # the output should be "True" or "False"
-    print(f"askLLM ({target} -> {ref}): {response}")
+    # print(f"askLLM ({target} -> {ref}): {response}")
     return response
 
 def binarySearch(low, high, highlight_idx):
@@ -173,6 +187,7 @@ if os.path.exists(f"data/{SPORTS}/highlight_idx.pkl"):
         highlight_idx = pickle.load(f)
 else:
     highlight_idx = []
+    print("Start binary search to find the score-changing frames...")
     binarySearch(0, len(frames)-1, highlight_idx)
     if highlight_idx[-1] != len(frames) - 1:
         highlight_idx.append(len(frames) - 1)
@@ -188,6 +203,7 @@ if os.path.exists(f"data/{SPORTS}/highlight_scoreboard.pkl") and os.path.exists(
     with open(f"data/{SPORTS}/highlight_times.pkl", "rb") as f:
         times = pickle.load(f)
 else:
+    print("Start asking LLM the score and the time of the game in the image")
     scoreboard = []
     times = []
     for i in highlight_idx:
@@ -215,7 +231,6 @@ else:
         )
         # parse the response
         response = response.choices[0].message.content
-        print(response)
         if SPORTS == "baseball":
             response = response.split("SCORE: ")[1]
             score, time = response.split(", INNINGS: ")
@@ -223,7 +238,6 @@ else:
             response = response.split("SCORE: ")[1]
             score, time = response.split(", TIME: ")
 
-        print(score, time)
         scoreboard.append(score)
         times.append(time)
 
@@ -233,11 +247,12 @@ else:
     with open(f"data/{SPORTS}/highlight_times.pkl", "wb") as f:
         pickle.dump(times, f)
 
-print(scoreboard)
-print(times)
+# print(scoreboard)
+# print(times)
 
 fps = video.get(cv2.CAP_PROP_FPS)
 frame_cnt = video.get(cv2.CAP_PROP_FRAME_COUNT)
+print("Generating summaries...")
 _, highlight_secs = gen_score_change_summary(highlight_idx, scoreboard, times, frame_cnt, fps, SPORTS, sec, frames_dir)
-
+print("Extracting highlights...")
 extract_hightlight(video_file, highlight_secs)
