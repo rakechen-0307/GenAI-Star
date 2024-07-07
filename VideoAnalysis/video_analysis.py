@@ -44,7 +44,7 @@ def ask_question(first_base64_image, second_base64_image):
 
 SPORTS="baseball"
 ckpt_file = "baseball_scoreboard.pt"
-video_file = "./videos/Mexico_Japan_baseball_full.mp4"
+video_file = "../videos/mexico_vs_japan.mp4"
 tmp_frames_dir = "./frames_tmp"
 
 yolo_model = YOLO(ckpt_file)
@@ -75,6 +75,7 @@ while success:
     if count > (fps*current_idx*sec):
         writeImage(image, tmp_frames_dir, current_idx)
         current_idx += 1
+        print(current_idx)
     success, image = video.read()
     count += 1
 
