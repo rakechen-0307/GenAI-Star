@@ -22,7 +22,10 @@ if __name__ == "__main__":
         if os.system(f"mv generated_summary.md {folder_name}/") != 0: raise
     except:
         print("\nDetected Ctrl-C! Performing cleanup before exit...")
-        os.system("./remove.sh")
+        os.system("rm -rf outputs")
+        os.system(f"rm {folder_name}_audio.wav")
         os.system(f"rm -rf {folder_name}")
         print("Cleanup done. Exiting program.")
+        
+        
         
