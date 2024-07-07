@@ -1,4 +1,8 @@
 frames_tmp
 frames
 videos
+.DS_Store
+.env
+__pycache__
+data
 scoreboard
