@@ -1,5 +1,7 @@
 import os
+import json
 import moviepy.editor as mp
+
 
 def extract_hightlight(filename, hightlights_secs):
     video = mp.VideoFileClip(filename)
@@ -27,6 +29,18 @@ def merge_hightlights(hightlights_in_seconds):
     return hightlights_in_seconds
 
 if __name__ == "__main__":
-    filename = "./Decibels/videos/US_Japan_baseball_full.mp4"
-    hightlights_secs = [(2760, 3000)]
+    filename = "./videos/Mexico_Japan_baseball_full.mp4"
+    with open("./data/baseball/highlight.json", "r") as f:
+        hightlights_json = json.load(f)
+
+    hightlights_secs = []
+    # turn the time from format of "00:00:00" to seconds
+    for highlight_secs in hightlights_json["highlight"]:
+        start = int(highlight_secs[0].split(":")[0]) * 3600 + int(highlight_secs[0].split(":")[1]) * 60 + int(highlight_secs[0].split(":")[2])
+        end = int(highlight_secs[1].split(":")[0]) * 3600 + int(highlight_secs[1].split(":")[1]) * 60 + int(highlight_secs[1].split(":")[2])
+        hightlights_secs.append((start, end))
+
+    # sort the hightlights by the start time
+    hightlights_secs.sort(key=lambda x: x[0])
+    print(hightlights_secs)
     extract_hightlight(filename, hightlights_secs)

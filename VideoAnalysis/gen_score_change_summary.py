@@ -27,7 +27,7 @@ def gen_score_change_summary(highlight_idx, scoreboard, times, frame_count, fps,
         if count == len(highlight_idx) - 1:
             break
         highlight_sec = int(frames[idx].split(".")[0]) * sec
-        highlight_sec, highlight_sec_next_frame = get_highlight_secs(highlight_sec, frame_count, fps)
+        highlight_sec, highlight_sec_next_frame = get_highlight_secs(highlight_sec, frame_count, fps, sec*2.5)
         highlight_secs.append((highlight_sec, highlight_sec_next_frame))
         # turn the time into the format of "00:00:00"
         highlight_sec = f"{highlight_sec//3600:02d}:{(highlight_sec%3600)//60:02d}:{highlight_sec%60:02d}"
@@ -44,7 +44,7 @@ def gen_score_change_summary(highlight_idx, scoreboard, times, frame_count, fps,
             summary += f"Score change time: {highlight_sec} ~ {highlight_sec_next_frame} --- score: {scoreboard[count]} => {scoreboard[count+1]}, Innings: {times[count]}\n"
         elif sports == "soccer":
             summary += f"Score change time: {highlight_sec} ~ {highlight_sec_next_frame} --- score: {scoreboard[count]} => {scoreboard[count+1]}, Game Time: {times[count]}\n"
-    print(summary)
+    # print(summary)
     assert os.path.exists(f"./data/{sports}")
     with open(f"data/{sports}/summary.txt", "w") as f:
         f.write(summary)
