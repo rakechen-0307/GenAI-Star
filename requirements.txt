@@ -1,6 +1,0 @@
-openai
-ultralytics
-torch
-opencv-python
-python-dotenv
-moviepy
